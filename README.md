@@ -6,7 +6,13 @@ Create an AKS cluster to test out Azure Dev Spaces:
 ```sh
 az group create --name devspaces --location australiaeast
 az aks create -g devspaces -n devspaces --location australiaeast --generate-ssh-keys
+```
 
+Register for Helm 3 preview (unless it has since gone GA) for Dev Spaces: https://docs.microsoft.com/en-us/azure/dev-spaces/how-to/helm-3
+
+Install Dev Spaces in your cluster:
+
+```sh
 az aks use-dev-spaces -g devspaces -n devspaces --space dev --yes
 azds show-context
 azds space list
@@ -129,7 +135,7 @@ cd samples/BikeSharingApp/
 azds show-context
 # Edit samples/BikeSharingApp/charts/values.yaml and replace placeholder with HostSuffix
 cd charts/
-helm3 install bikesharingsampleappsampleapp . --dependency-update --namespace dev --atomic
+helm install bikesharingsampleappsampleapp . --dependency-update --namespace dev --atomic
 ```
 
 * Create child dev spaces
