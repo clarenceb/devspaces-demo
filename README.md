@@ -75,8 +75,10 @@ Live reload:
 Cleanup:
 
 ```sh
-# dev-spaces/samples/nodejs/getting-started/webfrontend
+# cd dev-spaces/samples/nodejs/getting-started/webfrontend
 azds down
+rm .dockerignore azds.yaml Dockerfile
+rm -rf charts
 ```
 
 Demo 2 - Multiple dependent services
@@ -123,7 +125,16 @@ app.get('/api', function (req, res) {
 * Debug with F5 - Launch Server (AZDS)
 
 Stop debugging both apps.
-Cleanup with `azds down` in both directories (if required).
+
+Cleanup:
+
+* Run `azds down` in both app directories (if required).
+* In `dev-spaces/samples/nodejs/getting-started/webfrontend`, run:
+
+```sh
+rm .dockerignore azds.yaml Dockerfile
+rm -rf charts
+```
 
 Demo 3 - Team development on AKS
 --------------------------------
