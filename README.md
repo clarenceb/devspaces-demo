@@ -1,5 +1,5 @@
-Azure Dev Spaces
-================
+Azure Dev Spaces - Demo Script
+==============================
 
 Create an AKS cluster to test out Azure Dev Spaces:
 
@@ -205,3 +205,9 @@ Upgrade `azds` on Linux:
 ```sh
 curl -L https://aka.ms/get-azds-linux | bash
 ```
+
+References / Credits
+--------------------
+
+* [Official Azure Dev Spaces docs](https://docs.microsoft.com/en-us/azure/dev-spaces/about) - most of this demo is based on the official Azure Dev Spaces docs
+* [How Routing Works with Azure Dev Spaces](https://docs.microsoft.com/en-us/azure/dev-spaces/how-dev-spaces-works-routing)
