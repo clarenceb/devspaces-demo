@@ -26,7 +26,57 @@ git clone https://github.com/Azure/dev-spaces
 cd dev-spaces
 ```
 
-Demo 1 - Single nodeJS service
+Demo 1 - Team development on AKS
+--------------------------------
+
+* Deploy bikesharingapp to `dev` namespace
+
+```sh
+cd samples/BikeSharingApp/
+azds show-context
+# Edit samples/BikeSharingApp/charts/values.yaml and replace placeholder with HostSuffix
+cd charts/
+helm install bikesharingsampleappsampleapp . --dependency-update --namespace dev --atomic
+```
+
+* Create child dev spaces
+
+```sh
+azds space select -n dev/azureuser1 -y
+azds space select -n dev/azureuser2 -y
+azds space list
+```
+
+* Change into a service directory and make code changes
+
+```sh
+vim samples/BikeSharingApp/BikeSharingWeb/components/Header.js
+```
+
+* Deploy private changes to AKS
+
+```sh
+azds space select -n dev/azureuser2
+cd ../BikeSharingWeb/
+azds up
+# CTRL+C to stop streaming logs
+```
+
+* View the modified web app in yor local dev space:
+
+http://azureuser2.s.dev.bikesharingweb.XXXXXX.XXXXX.azds.io/
+
+* Verify existing web app in `dev` dev space is unchanged:
+
+http://dev.bikesharingweb.XXXXXX.XXXXX.azds.io/
+
+* Cleanup
+
+```sh
+azds down # cleanup child dev space
+```
+
+Demo 2 - Single nodeJS service
 ------------------------------
 
 ```sh
@@ -81,7 +131,7 @@ rm .dockerignore azds.yaml Dockerfile
 rm -rf charts
 ```
 
-Demo 2 - Multiple dependent services
+Demo 3 - Multiple dependent services
 ------------------------------------
 
 ```sh
@@ -90,8 +140,8 @@ azds space select -n dev/azureuser2 -y
 
 Open follow two projects in VSCode windows:
 
-* samples/nodejs/getting-started/mywebapi
-* samples/nodejs/getting-started/webfrontend
+* `samples/nodejs/getting-started/mywebapi`
+* `samples/nodejs/getting-started/webfrontend`
 
 In `webapi` vscode:
 
@@ -103,8 +153,8 @@ In `webfrontend` vscode:
 
 * Comment/uncomment sections of code in `server.js`
 * Uncomment `var request = require('request');`
-* Comment the exiting `app.get('/api', ...`
-* Uncomment
+* Comment the existing code line: `app.get('/api', ...`
+* Uncomment the follow code snippet:
 
 ```js
 app.get('/api', function (req, res) {
@@ -120,7 +170,8 @@ app.get('/api', function (req, res) {
 });
 ```
 
-* Comment the `server.close()` line at the end of `server.js`
+Here we are propagating the `azds-route-as` HTTP header so that we can route to another service running in our child space.
+
 * Set breakpoint in the GET / handler callback
 * Debug with F5 - Launch Server (AZDS)
 
@@ -134,56 +185,6 @@ Cleanup:
 ```sh
 rm .dockerignore azds.yaml Dockerfile
 rm -rf charts
-```
-
-Demo 3 - Team development on AKS
---------------------------------
-
-* Deploy bikesharingapp to `dev` namespace
-
-```sh
-cd samples/BikeSharingApp/
-azds show-context
-# Edit samples/BikeSharingApp/charts/values.yaml and replace placeholder with HostSuffix
-cd charts/
-helm install bikesharingsampleappsampleapp . --dependency-update --namespace dev --atomic
-```
-
-* Create child dev spaces
-
-```sh
-azds space select -n dev/azureuser1 -y
-azds space select -n dev/azureuser2 -y
-azds space list
-```
-
-* Change into a service directory and make code changes
-
-```sh
-vim samples/BikeSharingApp/BikeSharingWeb/components/Header.js
-```
-
-* Deploy private changes to AKS
-
-```sh
-azds space select -n dev/azureuser2
-cd ../BikeSharingWeb/
-azds up
-# CTRL+C to stop streaming logs
-```
-
-* View the modified web app in yor local dev space:
-
-http://azureuser2.s.dev.bikesharingweb.XXXXXX.XXXXX.azds.io/
-
-* Verify existing web app in `dev` dev space is unchanged:
-
-http://dev.bikesharingweb.XXXXXX.XXXXX.azds.io/
-
-* Cleanup
-
-```sh
-azds down # cleanup child dev space
 ```
 
 Commands
